@@ -13,7 +13,7 @@ pygame.display.set_caption("Bouncy Ball")
 clock = pygame.time.Clock()
 running = True
 dt = clock.tick(240)
-gravityConst = 0.02*dt
+gravityConst = 0.07*dt
 clock = pygame.time.Clock()
 getStar = 0
 star_img = pygame.image.load("images\\star.png")
@@ -93,7 +93,7 @@ mapGrid = [
     [
         [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
         ["B"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
-        ["P","P","P"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
+        ["P","P","J"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
         [" "," "," ","S"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
         [" "," "," ","S"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
         [" "," "," ","S"," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
@@ -145,14 +145,14 @@ mapGrid = [
     ],
         #Stage5
         [
-        [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
-        [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
-        [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
-        [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
-        [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
-        [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
-        [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
-        [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
+        ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"],
+        ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"],
+        ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"],
+        ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"],
+        ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"],
+        ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"],
+        ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"],
+        ["P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P","P"],
         [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
         [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
         [" "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "," "],
@@ -268,7 +268,7 @@ class Ball:
             global gameStart
             time.sleep(0.5)
             gameStart = True
-        if self.dy <= 3*dt:
+        if self.dy <= 7*dt:
             self.dy += gravityConst
         self.y += self.dy
         self.x += self.dx
@@ -278,27 +278,27 @@ class Ball:
         pygame.draw.circle(DISPLAY, BLACK, (self.x,self.y), self.radius, width=1)
 
     def detectMove(self):
-        if self.dx > 0.35*dt:
-            self.dx = 0.35*dt
-        elif self.dx < -0.35*dt:
-            self.dx = -0.35*dt
+        if self.dx > 0.8*dt:
+            self.dx = 0.8*dt
+        elif self.dx < -0.8*dt:
+            self.dx = -0.8*dt
         else:
             keys = pygame.key.get_pressed()
             if keys[pygame.K_a] or keys[pygame.K_LEFT]:
                 if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
                     if self.dx > 0:
-                        self.dx -= 0.008*dt
+                        self.dx -= 0.05*dt
                     elif self.dx<0:
-                        self.dx += 0.008*dt
+                        self.dx += 0.05*dt
                 else:
-                    self.dx -= 0.01*dt
+                    self.dx -= 0.05*dt
             elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-                self.dx += 0.01*dt
+                self.dx += 0.05*dt
             else:
                 if self.dx > 0:
-                    self.dx -= 0.008*dt
+                    self.dx -= 0.05*dt
                 elif self.dx<0:
-                    self.dx += 0.008*dt
+                    self.dx += 0.05*dt
 
 class Platform:
     def __init__(self,x,y,type,num):
@@ -317,13 +317,13 @@ class Platform:
             DISPLAY.blit(disp_img,(self.x,self.y))
 
     def collideWithBall(self,target):
-        if target.x+target.radius/2 > self.x and target.x-target.radius/2 < self.x+48 and target.dy > 0 and target.y+target.radius > self.y-3 and target.y+target.radius < self.y+48:
+        if target.x+target.radius/2 > self.x and target.x-target.radius/2 < self.x+48 and target.dy > 0 and target.y+target.radius > self.y-target.dy and target.y+target.radius < self.y+48:
             if self.type == "normal":
-                target.dy = -0.78*dt
+                target.dy = -1.5*dt
             elif self.type == "jump":
-                target.dy = -1*dt
+                target.dy = -2.2*dt
             if self.type == "disp":
-                target.dy = -0.78*dt
+                target.dy = -1.5*dt
                 platformList[self.num] = 0
         elif target.x+target.radius/2 > self.x and target.x-target.radius/2 < self.x+48 and target.dy <0 and target.y-target.radius > self.y and target.y-target.radius < self.y+48:
             target.dy = -target.dy
@@ -353,16 +353,17 @@ class Spike:
     def __init__(self,x,y):
         self.x = 65 + x*46
         self.y = 15 + y*46
-        self.rect_spike = pygame.Rect(self.x,self.y+5,46,18)
 
     def drawSpike(self):
         global DISPLAY
         DISPLAY.blit(spike_img,(self.x,self.y))
 
     def collideWithBall(self,target):
+        rect_spike = pygame.Rect(self.x,self.y+target.dy,46,18+target.dy)
         global gameStart
         target.rect = pygame.Rect(target.x-10, target.y-10,20,20)
-        if target.rect.colliderect(self.rect_spike):
+        if target.rect.colliderect(rect_spike):
+            target.dy = 0
             gameStart = True
         if target.x+target.radius > self.x and target.x+target.radius < self.x+48 and target.y+target.radius/2 > self.y+24 and target.y+target.radius/2 < self.y+48:
             target.dx = -4*dt
@@ -442,7 +443,7 @@ while running:
             spikeList[i].drawSpike()
             spikeList[i].collideWithBall(ball[0])
         if len(starList) == getStar:
-            if stage == 9:
+            if stage == 8:
                 scene = "clear"
             else:
                 time.sleep(0.5)
@@ -466,4 +467,4 @@ while running:
                 running = False
         
     pygame.display.update()
-    clock.tick(120)
+    clock.tick(60)
