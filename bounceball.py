@@ -9,11 +9,11 @@ BLACK = (0,0,0)
 YELLOW = (255,225,51)
 BLUE = (0,0,200)
 DISPLAY = pygame.display.set_mode([1280,720])
-pygame.display.set_caption("BounceBall")
+pygame.display.set_caption("Bouncy Ball")
 clock = pygame.time.Clock()
 running = True
 dt = clock.tick(240)
-gravityConst = 0.01*dt
+gravityConst = 0.02*dt
 clock = pygame.time.Clock()
 getStar = 0
 star_img = pygame.image.load("images\\star.png")
@@ -23,6 +23,7 @@ start_pressed_img = pygame.image.load("images\\start_pressed.png")
 jump_img = pygame.image.load("images\\jump_up.png")
 spike_img = pygame.image.load("images\\spike.png")
 disp_img = pygame.image.load("images\\glass.png")
+lobby_img = pygame.image.load("images\\lobby.png")
 
 '''
 맵 작성 요령
@@ -267,7 +268,7 @@ class Ball:
             global gameStart
             time.sleep(0.5)
             gameStart = True
-        if self.dy <= 1.5*dt:
+        if self.dy <= 3*dt:
             self.dy += gravityConst
         self.y += self.dy
         self.x += self.dx
@@ -277,21 +278,27 @@ class Ball:
         pygame.draw.circle(DISPLAY, BLACK, (self.x,self.y), self.radius, width=1)
 
     def detectMove(self):
-        if self.dx > 0.24*dt:
-            self.dx = 0.24*dt
-        elif self.dx < -0.24*dt:
-            self.dx = -0.24*dt
+        if self.dx > 0.35*dt:
+            self.dx = 0.35*dt
+        elif self.dx < -0.35*dt:
+            self.dx = -0.35*dt
         else:
             keys = pygame.key.get_pressed()
-            if keys[pygame.K_a] and not keys[pygame.K_d]:
-                self.dx -= 0.005*dt
-            elif keys[pygame.K_d]and not keys[pygame.K_a]:
-                self.dx += 0.005*dt
+            if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+                if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                    if self.dx > 0:
+                        self.dx -= 0.008*dt
+                    elif self.dx<0:
+                        self.dx += 0.008*dt
+                else:
+                    self.dx -= 0.01*dt
+            elif keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                self.dx += 0.01*dt
             else:
                 if self.dx > 0:
-                    self.dx -= 0.003*dt
+                    self.dx -= 0.008*dt
                 elif self.dx<0:
-                    self.dx += 0.003*dt
+                    self.dx += 0.008*dt
 
 class Platform:
     def __init__(self,x,y,type,num):
@@ -312,11 +319,11 @@ class Platform:
     def collideWithBall(self,target):
         if target.x+target.radius/2 > self.x and target.x-target.radius/2 < self.x+48 and target.dy > 0 and target.y+target.radius > self.y-3 and target.y+target.radius < self.y+48:
             if self.type == "normal":
-                target.dy = -0.53*dt
+                target.dy = -0.78*dt
             elif self.type == "jump":
-                target.dy = -0.75*dt
+                target.dy = -1*dt
             if self.type == "disp":
-                target.dy = -0.53*dt
+                target.dy = -0.78*dt
                 platformList[self.num] = 0
         elif target.x+target.radius/2 > self.x and target.x-target.radius/2 < self.x+48 and target.dy <0 and target.y-target.radius > self.y and target.y-target.radius < self.y+48:
             target.dy = -target.dy
@@ -388,7 +395,7 @@ def drawMap(grid):
                 platformNum += 1
             elif grid[i][j] == "M":
                 spikeList.append(Spike(j,i))
-    
+
 stage = 0
 scene = "lobby"
 gameStart = True
@@ -397,15 +404,16 @@ grid = gridSample
 while running:
     DISPLAY.fill(WHITE)
     if scene == "lobby":
+        DISPLAY.blit(lobby_img,(0,0))
         x,y = pygame.mouse.get_pos()
-        DISPLAY.blit(start_img,(320,120))
-        if pygame.Rect(531,313,205,96).collidepoint(x,y):
-            DISPLAY.blit(start_pressed_img,(320,120))
+        DISPLAY.blit(start_img,(320-300,120+100))
+        if pygame.Rect(531-300,313+100,205,96).collidepoint(x,y):
+            DISPLAY.blit(start_pressed_img,(320-300,120+100))
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
             if event.type == MOUSEBUTTONUP:
-                if event.button == 1 and pygame.Rect(531,313,205,96).collidepoint(x,y):
+                if event.button == 1 and pygame.Rect(531-300,313+100,205,96).collidepoint(x,y):
                     scene = "inGame"
                     gameStart = True
             
@@ -458,4 +466,4 @@ while running:
                 running = False
         
     pygame.display.update()
-    clock.tick(200)
+    clock.tick(120)
