@@ -10,9 +10,10 @@ BLACK = (0,0,0)
 YELLOW = (255,225,51)
 BLUE = (0,0,200)
 DISPLAY = pygame.display.set_mode([1280,720])
+bigfont = pygame.font.Font('NanumBarunGothicBold.otf', 70)
 font = pygame.font.Font('NanumBarunGothicBold.otf', 20)
 pygame.display.set_caption("Bouncy Ball")
-clock = pygame.time.Clock()
+clock = pygame.time.Clock()    
 running = True
 dt = 4
 gravityConst = 0.03*dt
@@ -395,7 +396,7 @@ while running:
             if event.type == MOUSEBUTTONUP:
                 if event.button == 1:
                     pygame.time.set_timer(USEREVENT,1000)
-                    counter, text = 300, " 남은 시간: ".rjust(1)+'300'.rjust(1)
+                    counter, text = 120, " 남은 시간: ".rjust(1)+'120'.rjust(1)
                     scene = "inGame"
                     stage = 0
                     gameStart = True
@@ -453,12 +454,16 @@ while running:
                 if starList[i].collideWithBall(ball[0]):
                     dNum += 1
 
+        if stage == 0:
+            DISPLAY.blit(font.render("좌 / 우 화살표키로 이동", True, (0, 0, 0)), (530, 45))
         DISPLAY.blit(font.render(text, True, (0, 0, 0)), (5, 5))
         ball[0].detectMove()
         ball[0].posUpdate()
         ball[0].drawBall()
+
     elif scene == "gameOver":
         DISPLAY.blit(gameover_img,(0,0))
+        DISPLAY.blit(bigfont.render("통과한 스테이지 : "+str(stage)+"개", True, (0, 0, 0)), (340, 300))
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
